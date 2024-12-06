@@ -1,17 +1,52 @@
+"use client";
+
 import SearchBar from "./SearchBar";
 import JobCategories from "./JobCategories";
 import FeaturedJobsSlider from "./FeaturedJobsSlider";
+import { useEffect, useState } from "react";
+import { WebsiteLoader } from "../common/Loader";
 
-const Home = async () => {
-  const [categoriesRes, featuredJobRes] = await Promise.all([
-    fetch(`https://joblistingplatform.netlify.app/api/job-categories`),
-    fetch(`https://joblistingplatform.netlify.app/api/jobs?featured=true`),
-  ]);
+const Home = () => {
+  const [categories, setCategories] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const [categories, { jobs }] = await Promise.all([
-    categoriesRes.json(),
-    featuredJobRes.json(),
-  ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null); // Reset error state
+      try {
+        // Fetch data in parallel
+        const [categoriesRes, featuredJobRes] = await Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/job-categories`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs?featured=true`),
+        ]);
+
+        if (!categoriesRes.ok || !featuredJobRes.ok) {
+          throw new Error(
+            `Error fetching data: Categories ${categoriesRes.status}, Jobs ${featuredJobRes.status}`
+          );
+        }
+
+        const categoriesData = await categoriesRes.json();
+        const jobsData = await featuredJobRes.json();
+
+        // Update state with fetched data
+        setCategories(categoriesData);
+        setJobs(jobsData.jobs);
+      } catch (error: any) {
+        console.error("Error fetching data:", error.message);
+        setError(error.message || "An unexpected error occurred.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (isLoading) return <WebsiteLoader />;
 
   return (
     <div>

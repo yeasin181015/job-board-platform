@@ -1,33 +1,53 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { Job } from "@/types/job";
 import JobDetails from "@/components/jobDetails/JobDetails";
+import { WebsiteLoader } from "@/components/common/Loader";
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
-const JobDetailsPage = async ({ params }: PageProps) => {
-  const { id } = await params;
-  try {
-    const res = await fetch(
-      `https://joblistingplatform.netlify.app/api/job-details?jobId=${id}`,
-      {
-        cache: "no-store",
+const JobDetailsPage = ({ params }: PageProps) => {
+  const [jobDetails, setJobDetails] = useState<Job | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/job-details?jobId=${params.id}`,
+          { cache: "no-store" }
+        );
+
+        if (!res.ok) {
+          throw new Error(`Failed to fetch job details. Status: ${res.status}`);
+        }
+
+        const data: { jobDetails: Job } = await res.json();
+        setJobDetails(data.jobDetails);
+      } catch (err: any) {
+        console.error("Error fetching job details:", err.message);
+        setError(err.message || "An unexpected error occurred.");
+      } finally {
+        setIsLoading(false);
       }
-    );
+    };
 
-    if (!res.ok) {
-      throw new Error(`Failed to fetch job details. Status: ${res.status}`);
-    }
+    fetchJobDetails();
+  }, [params.id]);
 
-    const data: { jobDetails: Job } = await res.json();
+  if (isLoading) return <WebsiteLoader />;
 
-    return <JobDetails job={data.jobDetails} />;
-  } catch (error) {
-    console.error(error);
-    return (
-      <div className="text-center text-red-500">Error fetching job details</div>
-    );
-  }
+  return jobDetails ? (
+    <JobDetails job={jobDetails} />
+  ) : (
+    <div className="text-center text-gray-500">No job details available.</div>
+  );
 };
 
 export default JobDetailsPage;

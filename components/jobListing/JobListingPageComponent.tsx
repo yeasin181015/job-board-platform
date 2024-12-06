@@ -35,16 +35,14 @@ const JobListingPageComponent = () => {
       setLoading(true);
       try {
         const [categoriesRes, jobsRes] = await Promise.all([
-          fetch("https://joblistingplatform.netlify.app/api/job-categories"),
+          fetch("${process.env.NEXT_PUBLIC_API_URL}/api/job-categories"),
           fetch(
-            `https://joblistingplatform.netlify.app/api/jobs?${new URLSearchParams(
-              {
-                category: category !== "All" ? category : "",
-                type,
-                location,
-                page: page.toString(),
-              }
-            ).toString()}`
+            `${process.env.NEXT_PUBLIC_API_URL}/api/jobs?${new URLSearchParams({
+              category: category !== "All" ? category : "",
+              type,
+              location,
+              page: page.toString(),
+            }).toString()}`
           ),
         ]);
 

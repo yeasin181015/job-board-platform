@@ -39,6 +39,60 @@ a {
   text-decoration: none;
 }
 
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--background-primary);
+}
+
+
+.loading-logo {
+  margin-bottom: 80px;
+}
+
+.loader {
+  display: flex;
+  gap: 10px;
+}
+
+.loader-dot {
+  width: 20px;
+  height: 20px;
+  background-color: black;
+  border-radius: 50%;
+  animation: bounce 0.5s infinite alternate;
+}
+.loader-dot1 {
+  width: 20px;
+  height: 20px;
+  background-color: black;
+  border-radius: 50%;
+  animation: bounce 0.5s infinite alternate;
+  animation-delay: 100ms;
+}
+
+.loader-dot2 {
+  width: 20px;
+  height: 20px;
+  background-color: black;
+  border-radius: 50%;
+  animation: bounce 0.5s infinite alternate;
+  animation-delay: 200ms;
+}
+
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

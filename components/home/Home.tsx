@@ -19,8 +19,8 @@ const Home = () => {
       try {
         // Fetch data in parallel
         const [categoriesRes, featuredJobRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/job-categories`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs?featured=true`),
+          fetch(`/api/job-categories`),
+          fetch(`/api/jobs?featured=true`),
         ]);
 
         if (!categoriesRes.ok || !featuredJobRes.ok) {

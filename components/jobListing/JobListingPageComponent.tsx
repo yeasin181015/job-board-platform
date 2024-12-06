@@ -35,9 +35,9 @@ const JobListingPageComponent = () => {
       setLoading(true);
       try {
         const [categoriesRes, jobsRes] = await Promise.all([
-          fetch("${process.env.NEXT_PUBLIC_API_URL}/api/job-categories"),
+          fetch("/api/job-categories"),
           fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/jobs?${new URLSearchParams({
+            `/api/jobs?${new URLSearchParams({
               category: category !== "All" ? category : "",
               type,
               location,

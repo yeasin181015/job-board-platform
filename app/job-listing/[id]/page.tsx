@@ -19,10 +19,9 @@ const JobDetailsPage = ({ params }: PageProps) => {
       setIsLoading(true);
       setError(null);
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/job-details?jobId=${params.id}`,
-          { cache: "no-store" }
-        );
+        const res = await fetch(`/api/job-details?jobId=${params.id}`, {
+          cache: "no-store",
+        });
 
         if (!res.ok) {
           throw new Error(`Failed to fetch job details. Status: ${res.status}`);

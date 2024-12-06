@@ -6,7 +6,6 @@ export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
 
-  // Get query parameters
   const type = searchParams.get("type");
   const query = searchParams.get("query");
   const category = searchParams.get("category");
@@ -16,7 +15,7 @@ export async function GET(req: Request) {
 
   let filteredJobs = jobs;
 
-  // Filter by `featured` if the parameter is provided
+
   if (isFeatured) {
     filteredJobs = filteredJobs.filter((job) => job.featured === true);
   }

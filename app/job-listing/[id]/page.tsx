@@ -8,9 +8,12 @@ interface PageProps {
 const JobDetailsPage = async ({ params }: PageProps) => {
   const { id } = await params;
   try {
-    const res = await fetch(`/api/job-details?jobId=${id}`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `https://joblistingplatform.netlify.app/api/job-details?jobId=${id}`,
+      {
+        cache: "no-store",
+      }
+    );
 
     if (!res.ok) {
       throw new Error(`Failed to fetch job details. Status: ${res.status}`);

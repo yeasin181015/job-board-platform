@@ -18,7 +18,9 @@ const SearchBar = () => {
       }
 
       try {
-        const res = await fetch(`/api/jobs?query=${debouncedQuery}`);
+        const res = await fetch(
+          `https://joblistingplatform.netlify.app/api/jobs?query=${debouncedQuery}`
+        );
         const { jobs } = await res.json();
         setSuggestions(jobs);
       } catch (error) {

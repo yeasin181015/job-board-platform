@@ -69,11 +69,14 @@ const PostJob = () => {
     };
 
     try {
-      const res = await fetch("/api/jobs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newJob),
-      });
+      const res = await fetch(
+        "https://joblistingplatform.netlify.app/api/jobs",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newJob),
+        }
+      );
 
       if (!res.ok) {
         console.error("Failed to post job");

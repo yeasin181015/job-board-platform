@@ -15,9 +15,8 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      setError(null); // Reset error state
+      setError(null); 
       try {
-        // Fetch data in parallel
         const [categoriesRes, featuredJobRes] = await Promise.all([
           fetch(`/api/job-categories`),
           fetch(`/api/jobs?featured=true`),
@@ -32,7 +31,6 @@ const Home = () => {
         const categoriesData = await categoriesRes.json();
         const jobsData = await featuredJobRes.json();
 
-        // Update state with fetched data
         setCategories(categoriesData);
         setJobs(jobsData.jobs);
       } catch (error: any) {

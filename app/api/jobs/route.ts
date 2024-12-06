@@ -53,9 +53,9 @@ export async function GET(req: Request) {
   const paginatedJobs = filteredJobs.slice(startIndex, startIndex + pageSize);
 
   return NextResponse.json({
-    jobs: paginatedJobs, // Paginated jobs for the current page
-    totalJobs: filteredJobs.length, // Total filtered jobs
-    currentPage: page, // Current page number
-    totalPages: Math.ceil(filteredJobs.length / pageSize), // Total number of pages
+    jobs: paginatedJobs,
+    totalJobs: filteredJobs.length,
+    currentPage: page,
+    totalPages: Math.ceil(filteredJobs.length / pageSize),
   });
 }

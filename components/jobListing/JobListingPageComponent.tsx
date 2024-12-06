@@ -91,10 +91,15 @@ const JobListingPageComponent = () => {
 
           <LocationFilter location={location} updateFilters={updateFilters} />
         </div>
-        {isAuthenticated && (
+        {isAuthenticated ? (
           <Button
             buttonText="Post a Job"
             onClick={() => router.push("/post-job")}
+          />
+        ) : (
+          <Button
+            buttonText="Login"
+            onClick={() => router.push("/auth/login")}
           />
         )}
       </div>

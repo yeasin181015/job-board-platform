@@ -17,7 +17,6 @@ export interface Job {
   requirements: string[];
 }
 
-// Define the validation schema using Yup
 const jobSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
   description: yup.string().required("Description is required"),
@@ -58,14 +57,14 @@ const PostJob = () => {
   }, [isAuthenticated]);
 
   if (!isAuthenticated) {
-    return <p>Loading...</p>; // Show loading while checking auth
+    return <p>Loading...</p>; 
   }
 
   const handleSubmit = async (values: typeof initialValues) => {
     const newJob: Job = {
       ...values,
-      id: Math.random(), // Generate a random ID
-      requirements: values.requirements.split(",").map((req) => req.trim()), // Convert requirements to an array
+      id: Math.random(), 
+      requirements: values.requirements.split(",").map((req) => req.trim()),
     };
 
     try {

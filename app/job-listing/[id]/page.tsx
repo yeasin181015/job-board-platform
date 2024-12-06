@@ -1,8 +1,12 @@
 import { Job } from "@/types/job";
 import JobDetails from "@/components/jobDetails/JobDetails";
 
-const JobDetailsPage = async ({ params }: { params: { id: string } }) => {
-  const id = (await params).id;
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+const JobDetailsPage = async ({ params }: PageProps) => {
+  const { id } = await params;
   try {
     const res = await fetch(
       `${process.env.LOCALSERVER}/api/job-details?jobId=${id}`,

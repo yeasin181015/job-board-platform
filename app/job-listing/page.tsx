@@ -8,61 +8,58 @@ import LocationFilter from "@/components/jobListing/LocationFilter";
 import JobList from "@/components/jobListing/JobList";
 import Button from "@/components/common/Button";
 import CustomPagination from "@/components/common/CustomPagination";
-import { useAuth } from "@/context/AuthProvider";
 import { WebsiteLoader } from "@/components/common/Loader";
+import { useAuth } from "@/context/AuthProvider";
 
 const JobCategoryPage = () => {
   const { isAuthenticated } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const { replace } = useRouter();
   const pathname = usePathname();
+  const { replace } = useRouter();
+  const searchParams = useSearchParams();
 
-  const category = searchParams.get("category") || "All";
   const type = searchParams.get("type") || "";
   const location = searchParams.get("location") || "";
   const page = parseInt(searchParams.get("page") || "1");
+  const category = searchParams.get("category") || "All";
 
-  const [jobs, setJobs] = useState<Array<Job>>([]);
+  const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
+  const [jobs, setJobs] = useState<Array<Job>>([]);
   const [jobCategories, setJobCategories] = useState<Array<JobCategoryTypes>>(
     []
   );
 
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
-    const fetchJobCategories = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        const res = await fetch("/api/job-categories");
-        const data = await res.json();
-        setJobCategories(data);
+        const [categoriesRes, jobsRes] = await Promise.all([
+          fetch("/api/job-categories"),
+          fetch(
+            `/api/jobs?${new URLSearchParams({
+              category: category !== "All" ? category : "",
+              type,
+              location,
+              page: page.toString(),
+            }).toString()}`
+          ),
+        ]);
+
+        const categoriesData = await categoriesRes.json();
+        const jobsData = await jobsRes.json();
+
+        setJobCategories(categoriesData);
+        setJobs(jobsData.jobs);
+        setTotalPages(jobsData.totalPages);
       } catch (error) {
-        console.error("Error fetching job categories:", error);
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchJobCategories();
-  }, []);
-
-  useEffect(() => {
-    setLoading(true);
-    const fetchJobs = async () => {
-      const query = new URLSearchParams({
-        category: category !== "All" ? category : "",
-        type,
-        location,
-        page: page.toString(),
-      }).toString();
-
-      const res = await fetch(`/api/jobs?${query}`);
-      const { jobs, totalPages } = await res.json();
-      setJobs(jobs);
-      setTotalPages(totalPages);
-    };
-
-    fetchJobs();
-    setLoading(false);
+    fetchData();
   }, [category, type, location, page]);
 
   const updateFilters = (key: string, value: string | number) => {
@@ -73,6 +70,10 @@ const JobCategoryPage = () => {
       params.delete(key);
     }
     replace(`${pathname}?${params.toString()}`);
+  };
+
+  const handlePostJob = () => {
+    router.push("/post-job");
   };
 
   return (

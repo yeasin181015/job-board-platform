@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { JobCategoryTypes } from "@/types/job";
+import { useRouter } from "next/navigation";
 
 interface CategoriesProps {
   categories: Array<JobCategoryTypes>;
 }
 const JobCategories = ({ categories }: CategoriesProps) => {
+  const router = useRouter();
   const [jobCategories, setJobCategories] =
     useState<Array<JobCategoryTypes>>(categories);
 
@@ -17,6 +19,7 @@ const JobCategories = ({ categories }: CategoriesProps) => {
           <div
             key={index}
             className="border border-black px-3 py-1 rounded-lg bg-[#d0d1d3] cursor-pointer hover:bg-[#dfe3ec]"
+            onClick={() => router.push(`/job-listing?category=${cat.title}`)}
           >
             <p>{cat.title}</p>
           </div>

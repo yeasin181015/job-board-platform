@@ -4,8 +4,10 @@ import { Job } from "@/types/job";
 import { useEffect, useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
 import SearchIcon from "../icons/SearchIcon";
+import { useRouter } from "next/navigation";
 
 const SearchBar = () => {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Array<Job>>([]);
   const debouncedQuery = useDebounce(query, 300);
@@ -68,11 +70,13 @@ const SearchBar = () => {
                 key={suggestion.id}
                 className="p-2 hover:bg-[#F6F2ED] cursor-pointer text-sm sm:text-md md:text-lg"
                 onClick={() => {
-                  setQuery(suggestion.title);
+                  // setQuery(suggestion.title);
                   setSuggestions([]);
+                  router.push(`/job-listing/${suggestion.id}`);
                 }}
               >
-                {suggestion.title}
+                <p>{suggestion.title}</p>
+                <p>Company: {suggestion.company}</p>
               </div>
             ))}
           </div>

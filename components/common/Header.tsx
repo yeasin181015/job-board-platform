@@ -2,10 +2,12 @@
 
 import { useAuth } from "@/context/AuthProvider";
 import LogoutButton from "./LogoutButton";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Button from "./Button";
 
 const Header = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated } = useAuth();
 
@@ -17,13 +19,23 @@ const Header = () => {
     else setAuth(false);
   }, [pathname]);
 
-  if (auth) {
-    return (
-      <div className="px-4 mt-6 mb-6 flex justify-end">
-        <LogoutButton />
-      </div>
-    );
-  } else return null;
+  return (
+    <div className="px-4 mt-2 mb-4 flex items-center justify-end gap-3">
+      <Button
+        buttonText="Home"
+        onClick={() => {
+          router.push("/");
+        }}
+      />
+      <Button
+        buttonText="Jobs"
+        onClick={() => {
+          router.push("/job-listing");
+        }}
+      />
+      {auth && <LogoutButton />}
+    </div>
+  );
 };
 
 export default Header;

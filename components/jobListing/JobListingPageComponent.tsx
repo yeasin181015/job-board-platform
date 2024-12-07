@@ -12,7 +12,7 @@ import { WebsiteLoader } from "@/components/common/Loader";
 import { useAuth } from "@/context/AuthProvider";
 
 const JobListingPageComponent = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -91,17 +91,21 @@ const JobListingPageComponent = () => {
 
           <LocationFilter location={location} updateFilters={updateFilters} />
         </div>
-        {isAuthenticated ? (
-          <Button
-            buttonText="Post a Job"
-            onClick={() => router.push("/post-job")}
-          />
-        ) : (
-          <Button
-            buttonText="Login"
-            onClick={() => router.push("/auth/login")}
-          />
-        )}
+        <div>
+          {authLoading ? (
+            <p></p>
+          ) : isAuthenticated ? (
+            <Button
+              buttonText="Post a Job"
+              onClick={() => router.push("/post-job")}
+            />
+          ) : (
+            <Button
+              buttonText="Login"
+              onClick={() => router.push("/auth/login")}
+            />
+          )}
+        </div>
       </div>
 
       {/* Jobs Listing */}
